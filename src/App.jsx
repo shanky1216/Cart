@@ -1,24 +1,33 @@
-import Header from "./components/Header.jsx";
-import Shop from "./components/Shop.jsx";
-import { DUMMY_PRODUCTS } from "./dummy-products.js";
-import Product from "./components/Product.jsx";
-import CartContextProvider from "./store/shopping-cart-context.jsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Shop from "./pages/Shop.jsx";
+import CartContextProvider from "./store/cart-context.jsx";
+import RootLayout from "./pages/RootLayout.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import Order from "./pages/Order.jsx";
+import Details from "./pages/Details.jsx";
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      { path: "", element: <Shop /> },
+      { path: "checkout", element: <Checkout /> },
+      {
+        path: "order",
+        children: [
+          { path: "", element: <Order /> },
+          { path: ":productId", element: <Details /> },
+        ],
+      },
+    ],
+  },
+]);
 function App() {
-
   return (
-
     <CartContextProvider>
-      <Header />
-      <Shop>
-        {DUMMY_PRODUCTS.map((product) => (
-          <li key={product.id}>
-            <Product {...product} />
-          </li>
-        ))}
-      </Shop>
+      <RouterProvider router={router}></RouterProvider>
     </CartContextProvider>
-
   );
 }
 
